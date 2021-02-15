@@ -63,7 +63,7 @@ export default () => {
   const handleClick = (col) => () => {
     let inv = invert(data);
     const freeIndex = getFreeIndex(inv[col]);
-    if (freeIndex != -1) {
+    if (freeIndex != -1 && !winner) {
       inv[col][freeIndex] = currentPlayer;
       checkWinner(inv);
       setCurrentPlayer(currentPlayer - 1 ? 1 : 2);
