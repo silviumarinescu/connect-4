@@ -41,22 +41,22 @@ if (!fs.existsSync("./data/data/0.json")) {
 }
 
 total += doIt(`./data/data`);
-for (let i = 0; i < 7; i++) {
-  total += doIt(`./data/data/${i}`);
-  for (let j = 0; j < 7; j++) {
-    total += doIt(`./data/data/${i}/${j}`);
-  }
-}
+// for (let i = 0; i < 7; i++) {
+//   total += doIt(`./data/data/${i}`);
+//   for (let j = 0; j < 7; j++) {
+//     total += doIt(`./data/data/${i}/${j}`);
+//   }
+// }
 
-const getComb = (toDo) => {
+const getComb = (min, max) => {
   let arr = [0];
   let index = 0;
   let lastIndex = 0;
   const result = [];
-  result.push(arr.join("/"))
-  for (let i = 0; i < toDo; i++) {
+  result.push(arr.join("/"));
+  for (let i = 0; i < max; i++) {
     arr[index]++;
-    result.push(arr.join("/"))
+    result.push(arr.join("/"));
     if (arr[index] == 6) {
       if (index != 0) {
         arr[index] = 0;
@@ -66,7 +66,7 @@ const getComb = (toDo) => {
         arr.push(0);
         lastIndex++;
         index = lastIndex;
-        result.push(arr.join("/"))
+        result.push(arr.join("/"));
       }
     } else {
       index = lastIndex;
@@ -75,6 +75,10 @@ const getComb = (toDo) => {
   return result;
 };
 
-
+const comb = getComb(0, 5000);
+for (let i = 0; i < comb.length; i++) {
+  console.log(i);
+  total += doIt(`./data/data/${comb[i]}`);
+}
 
 console.log("done", total);
