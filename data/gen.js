@@ -2,21 +2,23 @@ const fs = require("fs");
 const helper = require("../utils/helper");
 
 let doIt = (currntPath) => {
-  const player = currntPath.split("/").length % 2 ? 1 : 2;
-  const board = JSON.parse(fs.readFileSync(`${currntPath}/0.json`));
   let done = 0;
-  if (helper.getState(board) == 4) {
-    for (i = 0; i < 7; i++) {
-      let dir = `${currntPath}/${i}`;
-      if (!fs.existsSync(`${dir}/0.json`)) {        
-        if (helper.isLegalMoove(board, i))
-        {
-          done++;
-          if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-          fs.writeFileSync(
-            `${dir}/0.json`,
-            JSON.stringify(helper.makeMoove(board, i, player))
-          );
+  if (fs.existsSync(`${currntPath}/0.json`)) {
+    const player = currntPath.split("/").length % 2 ? 1 : 2;
+    const board = JSON.parse(fs.readFileSync(`${currntPath}/0.json`));
+
+    if (helper.getState(board) == 4) {
+      for (i = 0; i < 7; i++) {
+        let dir = `${currntPath}/${i}`;
+        if (!fs.existsSync(`${dir}/0.json`)) {
+          if (helper.isLegalMoove(board, i)) {
+            done++;
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+            fs.writeFileSync(
+              `${dir}/0.json`,
+              JSON.stringify(helper.makeMoove(board, i, player))
+            );
+          }
         }
       }
     }
@@ -64,7 +66,7 @@ const getComb = (start, count) => {
     lastIndex++;
   }
   result.push(arr.join("/"));
-  for (let i = 0; i < count-1; i++) {
+  for (let i = 0; i < count - 1; i++) {
     if (arr[index] == 6) {
       if (index != 0) {
         i--;
@@ -86,11 +88,11 @@ const getComb = (start, count) => {
   return result;
 };
 
-const comb = getComb("1/2/2/2/1/1", 10000);
+const comb = getComb("0/5/1/3/2/4/1", 100000);
 
 for (let i = 0; i < comb.length; i++) {
   total += doIt(`./data/data/${comb[i]}`);
-  console.clear()
+  console.clear();
   console.log(comb[i]);
 }
 console.log("done", total);
