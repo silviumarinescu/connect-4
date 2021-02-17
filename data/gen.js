@@ -1,5 +1,4 @@
 const fs = require("fs");
-const { allowedNodeEnvironmentFlags } = require("process");
 const helper = require("../utils/helper");
 
 let doIt = (currntPath) => {
@@ -9,14 +8,16 @@ let doIt = (currntPath) => {
   if (helper.getState(board) == 4) {
     for (i = 0; i < 7; i++) {
       let dir = `${currntPath}/${i}`;
-      if (!fs.existsSync(`${dir}/0.json`)) {
-        done++;
-        if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+      if (!fs.existsSync(`${dir}/0.json`)) {        
         if (helper.isLegalMoove(board, i))
+        {
+          done++;
+          if (!fs.existsSync(dir)) fs.mkdirSync(dir);
           fs.writeFileSync(
             `${dir}/0.json`,
             JSON.stringify(helper.makeMoove(board, i, player))
           );
+        }
       }
     }
   }
@@ -42,18 +43,31 @@ if (!fs.existsSync("./data/data/0.json")) {
 
 total += doIt(`./data/data`);
 
-
-const getComb = (min, max) => {
-  let arr = [0];
-  let index = 0;
-  let lastIndex = 0;
+const getComb = (start, count) => {
   const result = [];
+  // let arr = [0];
+  let index = 0;
+
+  let arr = start.split("/").map((c) => parseInt(c));
+  let lastIndex = arr.length - 1;
+  let found = false;
+  for (let i = lastIndex; i >= 0; i--) {
+    if (arr[i] != 6) {
+      index = i;
+      found = true;
+      break;
+    }
+  }
+  if (!found) {
+    arr = arr.map(() => 0);
+    arr.push(0);
+    lastIndex++;
+  }
   result.push(arr.join("/"));
-  for (let i = 0; i < max; i++) {
-    arr[index]++;
-    result.push(arr.join("/"));
+  for (let i = 0; i < count-1; i++) {
     if (arr[index] == 6) {
       if (index != 0) {
+        i--;
         arr[index] = 0;
         index--;
       } else {
@@ -64,16 +78,19 @@ const getComb = (min, max) => {
         result.push(arr.join("/"));
       }
     } else {
-      index = lastIndex;
+      arr[index]++;
+      result.push(arr.join("/"));
+      if (index < lastIndex && arr[index + 1] != 6) index++;
     }
   }
   return result;
 };
 
-const comb = getComb(0, 5000);
-for (let i = 0; i < comb.length; i++) {
-  console.log(i);
-  total += doIt(`./data/data/${comb[i]}`);
-}
+const comb = getComb("1/2/2/2/1/1", 10000);
 
+for (let i = 0; i < comb.length; i++) {
+  total += doIt(`./data/data/${comb[i]}`);
+  console.clear()
+  console.log(comb[i]);
+}
 console.log("done", total);
