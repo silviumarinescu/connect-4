@@ -48,10 +48,11 @@ for (let i = 0; i < 7; i++) {
   }
 }
 // works !!!
-let toDo = 100000000;
+let toDo = 100;
 let arr = [0];
 let index = 0;
 let lastIndex = 0;
+console.log('0')
 for (let i = 0; i < toDo; i++) {
   arr[index]++;
   console.log(arr.join("/"));
@@ -64,6 +65,7 @@ for (let i = 0; i < toDo; i++) {
       arr.push(0);
       lastIndex++;
       index = lastIndex;
+      console.log(arr.join("/"));
     }
   } else {
     index = lastIndex;
