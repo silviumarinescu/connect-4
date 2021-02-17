@@ -41,12 +41,7 @@ if (!fs.existsSync("./data/data/0.json")) {
 }
 
 total += doIt(`./data/data`);
-// for (let i = 0; i < 7; i++) {
-//   total += doIt(`./data/data/${i}`);
-//   for (let j = 0; j < 7; j++) {
-//     total += doIt(`./data/data/${i}/${j}`);
-//   }
-// }
+
 
 const getComb = (min, max) => {
   let arr = [0];
