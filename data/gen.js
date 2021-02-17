@@ -47,29 +47,34 @@ for (let i = 0; i < 7; i++) {
     total += doIt(`./data/data/${i}/${j}`);
   }
 }
-// works !!!
-let toDo = 100;
-let arr = [0];
-let index = 0;
-let lastIndex = 0;
-console.log('0')
-for (let i = 0; i < toDo; i++) {
-  arr[index]++;
-  console.log(arr.join("/"));
-  if (arr[index] == 6) {
-    if (index != 0) {
-      arr[index] = 0;
-      index--;
+
+const getComb = (toDo) => {
+  let arr = [0];
+  let index = 0;
+  let lastIndex = 0;
+  const result = [];
+  result.push(arr.join("/"))
+  for (let i = 0; i < toDo; i++) {
+    arr[index]++;
+    result.push(arr.join("/"))
+    if (arr[index] == 6) {
+      if (index != 0) {
+        arr[index] = 0;
+        index--;
+      } else {
+        arr = arr.map(() => 0);
+        arr.push(0);
+        lastIndex++;
+        index = lastIndex;
+        result.push(arr.join("/"))
+      }
     } else {
-      arr = arr.map(() => 0);
-      arr.push(0);
-      lastIndex++;
       index = lastIndex;
-      console.log(arr.join("/"));
     }
-  } else {
-    index = lastIndex;
   }
-}
+  return result;
+};
+
+
 
 console.log("done", total);
